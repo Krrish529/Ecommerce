@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block contenido %}
+
+<h2 class="mb-4">📦 Mis Pedidos</h2>
+
+{% if pedidos %}
+    {% for pedido in pedidos %}
+    <div class="card p-3 mb-3">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="fw-bold">Pedido #{{ pedido.id }}</span>
+            <span class="badge bg-secondary">{{ pedido.fecha.strftime("%d/%m/%Y %H:%M") }}</span>
+        </div>
+
+        <p class="small text-muted mb-2">Estado: <strong>{{ pedido.estado }}</strong></p>
+        <p class="small text-muted mb-2">Entrega: {{ pedido.direccion_entrega }}</p>
+
+        <ul class="list-unstyled mb-2">
+            {% for item in pedido.items %}
+            <li class="small">{{ item.cantidad }}x {{ item.producto.nombre }} — S/. {{ "%.2f"|format(item.subtotal) }}</li>
+            {% endfor %}
+        </ul>
+
+        <div class="d-flex justify-content-between border-top pt-2">
+            <span>Pagado con: <strong>{{ pedido.metodo_pago }}</strong></span>
+            <span class="text-success fw-bold">Total: S/. {{ "%.2f"|format(pedido.total) }}</span>
+        </div>
+    </div>
+    {% endfor %}
+{% else %}
+    <p class="text-center fs-5 mt-5">Aún no tienes pedidos 📭</p>
+    <div class="text-center">
+        <a href="/" class="btn btn-cian">Ir al catálogo</a>
+    </div>
+{% endif %}
+
+{% endblock %}

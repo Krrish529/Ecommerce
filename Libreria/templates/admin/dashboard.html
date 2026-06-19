@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block contenido %}
+
+<h2>🛠️ Panel de Administrador</h2>
+
+<div class="row text-center">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h3>{{ total_productos }}</h3>
+                <p>Productos</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h3>{{ total_pedidos }}</h3>
+                <p>Pedidos</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<a href="{{ url_for('admin_usuarios') }}" class="btn btn-primary mt-4">Gestionar Usuarios</a>
+
+{% endblock %}

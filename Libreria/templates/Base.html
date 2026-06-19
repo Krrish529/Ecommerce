@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Librería CarriSO</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --cian: #00e5ff;
+            --negro: #0a0a0a;
+            --negro-suave: #141414;
+            --gris-borde: #1f1f1f;
+        }
+
+        body {
+            background-color: var(--negro);
+            color: #e0e0e0;
+        }
+
+        .navbar {
+            background-color: var(--negro-suave) !important;
+            border-bottom: 2px solid var(--cian);
+        }
+
+        .navbar-brand {
+            color: var(--cian) !important;
+            font-weight: bold;
+        }
+
+        .card {
+            background-color: var(--negro-suave);
+            border: 1px solid var(--gris-borde);
+            color: #e0e0e0;
+        }
+
+        .card:hover {
+            border-color: var(--cian);
+            box-shadow: 0 0 15px rgba(0, 229, 255, 0.15);
+            transition: 0.3s;
+        }
+
+        .card-title {
+            color: #fff;
+        }
+
+        .text-success {
+            color: var(--cian) !important;
+        }
+        .text-muted {
+            color: #ffffff !important;
+            opacity: 0.85;
+        }
+
+        .badge.bg-secondary {
+            background-color: #2a2a2a !important;
+            color: var(--cian);
+            border: 1px solid var(--cian);
+        }
+
+        .btn-outline-primary {
+            color: var(--cian);
+            border-color: var(--cian);
+        }
+        .btn-outline-primary:hover {
+            background-color: var(--cian);
+            color: #000;
+        }
+
+        .btn-primary {
+            background-color: var(--cian);
+            border-color: var(--cian);
+            color: #000;
+            font-weight: 600;
+        }
+        .btn-primary:hover {
+            background-color: #00b8cc;
+            border-color: #00b8cc;
+            color: #000;    
+        }
+
+        .badge.bg-danger {
+            background-color: #ff2d55 !important;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/">Librería CarriSO</a>
+            
+            <div class="d-flex align-items-center gap-2">
+                {% if session.get('usuario_nombre') %}
+                    <span class="small me-3">Hola, {{ session.get('usuario_nombre') }}</span>
+                    
+                    <!-- CARRITO -->
+                    <a href="{{ url_for('ver_carrito') }}" class="btn btn-outline-light btn-sm position-relative me-2">
+                        🛒 Carrito
+                        {% if carrito_items_count > 0 %}
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                {{ carrito_items_count }}
+                            </span>
+                        {% endif %}
+                    </a>
+                    
+                    <a href="{{ url_for('mis_pedidos') }}" class="btn btn-outline-light btn-sm me-2">Mis Pedidos</a>
+                    
+                    {% if session.get('es_vendedor') %}
+                        <a href="{{ url_for('panel_vendedor') }}" class="btn btn-outline-light btn-sm me-2">Mis Productos</a>
+                    {% endif %}
+
+                    <!-- PANEL ADMIN -->
+                    {% if current_user and current_user.rol == 'admin' %}
+                        <a href="{{ url_for('panel_admin') }}" class="btn btn-outline-light btn-sm me-2"> Admin</a>
+                    {% endif %}
+                    
+                    <a href="{{ url_for('logout') }}" class="btn btn-outline-light btn-sm">Salir</a>
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="btn btn-outline-light btn-sm">Iniciar sesión</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        {% block contenido %}{% endblock %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

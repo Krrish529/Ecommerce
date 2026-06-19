@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block contenido %}
+
+<h2>👥 Gestión de Usuarios</h2>
+
+<table class="table table-dark table-hover">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Rol Actual</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for u in usuarios %}
+        <tr>
+            <td>{{ u.id }}</td>
+            <td>{{ u.nombre_completo }}</td>
+            <td>{{ u.email }}</td>
+            <td>
+                <span class="badge bg-{{ 'success' if u.rol=='admin' else 'primary' if u.rol=='vendedor' else 'secondary' }}">
+                    {{ u.rol }}
+                </span>
+            </td>
+            <td>
+                <form method="POST" action="{{ url_for('cambiar_rol', usuario_id=u.id) }}" class="d-inline">
+                    <select name="rol" onchange="this.form.submit()">
+                        <option value="cliente" {% if u.rol=='cliente' %}selected{% endif %}>Cliente</option>
+                        <option value="vendedor" {% if u.rol=='vendedor' %}selected{% endif %}>Vendedor</option>
+                        <option value="admin" {% if u.rol=='admin' %}selected{% endif %}>Administrador</option>
+                    </select>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block contenido %}
+
+<h2 class="mb-3">Nuestros Productos</h2>
+
+<form method="GET" class="mb-4">
+    <div class="row g-3">
+        <div class="col-md-5">
+            <input type="text" 
+                   name="q" 
+                   value="{{ busqueda or '' }}" 
+                   class="form-control" 
+                   placeholder="Buscar por nombre, marca o descripción...">
+        </div>
+        <div class="col-md-3">
+            <select name="categoria" class="form-select">
+                <option value="">Todas las categorías</option>
+                {% for cat in categorias %}
+                <option value="{{ cat.id }}" 
+                        {% if categoria_activa == cat.id %}selected{% endif %}>
+                    {{ cat.icono }} {{ cat.nombre }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-2">
+            <input type="number" 
+                   name="precio_min" 
+                   value="{{ precio_min or '' }}" 
+                   class="form-control" 
+                   placeholder="Precio mín" 
+                   step="0.01">
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">Buscar</button>
+        </div>
+    </div>
+</form>
+
+<div class="mb-4">
+    <a href="/" class="btn btn-sm me-1 {% if not categoria_activa %}btn-primary{% else %}btn-outline-primary{% endif %}">
+        Todos
+    </a>
+    {% for cat in categorias %}
+    <a href="/?categoria={{ cat.id }}"
+       class="btn btn-sm me-1 {% if categoria_activa == cat.id %}btn-primary{% else %}btn-outline-primary{% endif %}">
+        {{ cat.icono }} {{ cat.nombre }}
+    </a>
+    {% endfor %}
+</div>
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for producto in productos %}
+    <div class="col">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <span class="badge bg-secondary mb-2">{{ producto.categoria.nombre }}</span>
+                <h5 class="card-title">
+                    <a href="/producto/{{ producto.id }}" class="text-decoration-none" style="color: #fff;">
+                        {{ producto.nombre }}
+                    </a>
+                </h5>
+                <p class="text-muted small">Marca: {{ producto.marca }}</p>
+                <p class="fw-bold text-success fs-5">S/. {{ "%.2f"|format(producto.precio) }}</p>
+                <p class="small text-muted">Stock: {{ producto.stock }} unidades</p>
+                {% if producto.total_resenas > 0 %}
+                <p class="small">⭐ {{ producto.promedio_estrellas }} ({{ producto.total_resenas }} reseñas)</p>
+                {% endif %}
+            </div>
+            <div class="card-footer">
+                <a href="/agregar/{{ producto.id }}" class="btn btn-primary w-100">🛒 Agregar al carrito</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block contenido %}
+
+<div class="row">
+    <div class="col-md-7">
+        <span class="badge bg-secondary mb-2">{{ producto.categoria.nombre }}</span>
+        <h2>{{ producto.nombre }}</h2>
+        <p class="text-muted">Marca: {{ producto.marca }} — Vendido por {{ producto.vendedor.nombre_completo }}</p>
+
+        {% if producto.total_resenas > 0 %}
+        <p>⭐ {{ producto.promedio_estrellas }} / 5 ({{ producto.total_resenas }} reseñas)</p>
+        {% else %}
+        <p class="text-muted">Aún sin reseñas</p>
+        {% endif %}
+
+        <p>{{ producto.descripcion }}</p>
+
+        <p class="fw-bold text-success fs-3">S/. {{ "%.2f"|format(producto.precio) }}</p>
+        <p class="small text-muted">Stock disponible: {{ producto.stock }} unidades</p>
+
+        <a href="/agregar/{{ producto.id }}" class="btn btn-cian btn-lg">🛒 Agregar al carrito</a>
+    </div>
+</div>
+
+<hr class="my-5">
+
+<h4 class="mb-4">Reseñas</h4>
+
+{% if session.get('usuario_id') %}
+<div class="card p-3 mb-4">
+    <h6>Deja tu reseña</h6>
+    <form method="POST" action="/producto/{{ producto.id }}/resena">
+        <div class="mb-2">
+            <label class="form-label small">Estrellas</label>
+            <select name="estrellas" class="form-select" required>
+                <option value="5">⭐⭐⭐⭐⭐ Excelente</option>
+                <option value="4">⭐⭐⭐⭐ Muy bueno</option>
+                <option value="3">⭐⭐⭐ Bueno</option>
+                <option value="2">⭐⭐ Regular</option>
+                <option value="1">⭐ Malo</option>
+            </select>
+        </div>
+        <div class="mb-2">
+            <input type="text" name="titulo" class="form-control" placeholder="Título de tu reseña" required>
+        </div>
+        <div class="mb-2">
+            <textarea name="comentario" class="form-control" rows="3" placeholder="Cuéntanos tu experiencia" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-cian">Publicar reseña</button>
+    </form>
+</div>
+{% else %}
+<p><a href="/login" style="color: var(--cian);">Inicia sesión</a> para dejar una reseña.</p>
+{% endif %}
+
+{% if resenas %}
+    {% for resena in resenas %}
+    <div class="card p-3 mb-3">
+        <div class="d-flex justify-content-between">
+            <strong>{{ resena.titulo }}</strong>
+            <span>{{ "⭐" * resena.estrellas }}</span>
+        </div>
+        <p class="small text-muted mb-1">{{ resena.usuario.nombre }} — {{ resena.fecha.strftime("%d/%m/%Y") }}</p>
+        <p class="mb-0">{{ resena.comentario }}</p>
+    </div>
+    {% endfor %}
+{% else %}
+<p class="text-muted">Sé el primero en dejar una reseña de este producto.</p>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,19 @@
+# Archivos de entorno (credenciales)
+.env
+
+# Archivos de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de desarrollo
+.env.local
+.env.production
+
+# Carpeta de caché
+.pycache/

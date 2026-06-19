@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block contenido %}
+
+<div class="text-center mt-5">
+    <h1 class="text-success"> ¡Pago exitoso!</h1>
+    <p class="fs-5 mt-3">Pagaste <strong>S/. {{ "%.2f"|format(total) }}</strong> con <strong>{{ metodo }}</strong></p>
+    <p class="text-muted">Tu pedido está siendo procesado.</p>
+    <a href="/" class="btn btn-cian btn-lg mt-4">Volver al catálogo</a>
+</div>
+
+{% endblock %}

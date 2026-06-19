@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block contenido %}
+
+<h2>🛒 Tu Carrito</h2>
+
+{% if items %}
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Producto</th>
+            <th>Marca</th>
+            <th>Precio</th>
+            <th>Cantidad</th>
+            <th>Subtotal</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in items %}
+        <tr>
+            <td>{{ item.producto.nombre }}</td>
+            <td>{{ item.producto.marca }}</td>
+            <td>S/. {{ "%.2f"|format(item.producto.precio) }}</td>
+            <td>
+                <form action="{{ url_for('actualizar_cantidad', item_id=item.id) }}" method="POST" class="d-inline">
+                    <input type="number" name="cantidad" value="{{ item.cantidad }}" min="1" style="width: 70px;" class="form-control d-inline">
+                    <button type="submit" class="btn btn-sm btn-outline-secondary">Actualizar</button>
+                </form>
+            </td>
+            <td>S/. {{ "%.2f"|format(item.subtotal) }}</td>
+            <td>
+                <a href="{{ url_for('eliminar_carrito', item_id=item.id) }}" class="btn btn-sm btn-danger">Eliminar</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h4>Total: S/. {{ "%.2f"|format(total) }}</h4>
+<a href="{{ url_for('pago') }}" class="btn btn-success btn-lg">Continuar al pago →</a>
+
+{% else %}
+<p>Tu carrito está vacío.</p>
+<a href="{{ url_for('catalogo') }}" class="btn btn-primary">Ver productos</a>
+{% endif %}
+
+{% endblock %}

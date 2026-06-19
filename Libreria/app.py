@@ -306,7 +306,7 @@ def pago():
 @login_requerido
 def mis_pedidos():
     pedidos = Pedido.query.filter_by(usuario_id=session["usuario_id"]).order_by(Pedido.fecha.desc()).all()
-    return render_template("Pedidos.html", pedidos=pedidos)
+    return render_template("pedidos.html", pedidos=pedidos)
 
 
 # ==================== VENDEDOR ====================
